@@ -1,5 +1,7 @@
 from persistent.mapping import PersistentMapping as BaseDict
 
+_marker = "__marker__"
+
 class OrderedPersistentMapping(BaseDict):
     """A wrapper around PersistenMapping objects that provides an
        ordering for keys() and items().  Almost entirely taken from
@@ -67,9 +69,14 @@ class OrderedPersistentMapping(BaseDict):
         del self.data[k]
         return (k, v)
 
-    def pop(self, key):
-        v = self.data.pop(key) # will raise KeyError if needed
-        self._keys.remove(key)
+    def pop(self, key, default=_marker):
+        if default is not _marker:
+            v = self.data.pop(key, default)
+            if key in self._keys:
+                self._keys.remove(key)
+        else:
+            v = self.data.pop(key) # will raise KeyError if needed
+            self._keys.remove(key)
         return v
 
     def __iter__(self):
