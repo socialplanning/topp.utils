@@ -47,8 +47,8 @@ class OrderedPersistentMapping(BaseDict):
         return BaseDict.update(self, dict)
 
     def copy(self):
-        if self.__class__ is OrderedDict:
-            c = OrderedDict()
+        if self.__class__ is OrderedPersistentMapping:
+            c = OrderedPersistentMapping()
             for k, v in self.items():
                 c[k] = v
             return c
