@@ -3,14 +3,14 @@ from persistent.mapping import PersistentMapping as BaseDict
 _marker = "__marker__"
 
 class OrderedPersistentMapping(BaseDict):
-    """A wrapper around PersistenMapping objects that provides an
-       ordering for keys() and items().  Almost entirely taken from
-       Archetypes's utils.OrderedDict class."""
+    """A subclass of PersistentMapping that provides an ordering for
+       keys() and items().  Almost entirely taken from Archetypes's
+       utils.OrderedDict class."""
 
-    def __init__(self, dict=None):	
-        self._keys = []	
-        BaseDict.__init__(self, dict)	
-        if dict is not None:	
+    def __init__(self, dict=None):
+        self._keys = []
+        BaseDict.__init__(self, dict)
+        if dict is not None:
             self._keys = self.data.keys()
 
     def __setitem__(self, key, item):
@@ -74,9 +74,11 @@ class OrderedPersistentMapping(BaseDict):
             v = self.data.pop(key, default)
             if key in self._keys:
                 self._keys.remove(key)
+                self._p_changed = True
         else:
             v = self.data.pop(key) # will raise KeyError if needed
             self._keys.remove(key)
+            self._p_changed = True
         return v
 
     def __iter__(self):
