@@ -22,33 +22,24 @@
 from datetime import date
 
 def _date_diff(date1, date2):
-    return (date1.toordinal() - date2.toordinal())
+    return date1.toordinal() - date2.toordinal()
 
 
 def _pretty_date_engine(now, date):
     diff = _date_diff(date, now)
-    if (diff == -1):
-	return "Yesterday"
-    
-    if (diff == 0):
-	return "Today"
-    
-    if (diff == 1):
-	return "Tomorrow"
-    
-    if (diff < 7 and diff > 0):
-	return date.strftime("%A")
-    
-    if (diff < 90 and date.year == now.year):
-	return date.strftime("%B %e")
-    
-    return date.strftime("%B %e, %Y")
+    if diff == -1:
+	    return 'Yesterday'
+    if diff == 0:
+	    return 'Today'
+    if diff == 1:
+	    return 'Tomorrow'
+    if 0 < diff < 7:
+	    return date.strftime('%A')
+    if diff < 90 and date.year == now.year:
+	    return date.strftime('%B %e')
+    return date.strftime('%B %e, %Y')
 
 
 def prettyDate(date):
     now = date.today()
     return _pretty_date_engine(now, date)
-
-
-
-
