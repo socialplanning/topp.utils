@@ -28,11 +28,11 @@ def _date_diff(date1, date2):
 def _pretty_date_engine(now, date):
     diff = _date_diff(date, now)
     if diff == -1:
-	    return 'Yesterday'
+	    return 'yesterday'
     if diff == 0:
-	    return 'Today'
+	    return 'today'
     if diff == 1:
-	    return 'Tomorrow'
+	    return 'tomorrow'
     if 0 < diff < 7:
 	    return date.strftime('%A')
     if diff < 90 and date.year == now.year:
