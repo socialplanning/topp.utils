@@ -19,14 +19,31 @@
 # Boston, MA  02110-1301
 # USA
 
-from datetime import date
+from datetime import datetime as pydt
+from DateTime import DateTime as zopedt
 
-def _date_diff(date1, date2):
+def _date_diff_zope(date1, date2):
+    return date1.JulianDay() - date2.JulianDay()
+
+def _date_diff_py(date1, date2):
     return date1.toordinal() - date2.toordinal()
 
+def _pretty_date_engine_zope(now, date):
+    diff = _date_diff_zope(date, now)
+    if diff == -1:
+	    return 'yesterday'
+    if diff == 0:
+	    return 'today'
+    if diff == 1:
+	    return 'tomorrow'
+    if 0 < diff < 7:
+	    return date.strftime('%A')
+    if diff < 90 and date.year() == now.year():
+	    return date.strftime('%B %e')
+    return date.strftime('%B %e, %Y')
 
-def _pretty_date_engine(now, date):
-    diff = _date_diff(date, now)
+def _pretty_date_engine_py(now, date):
+    diff = _date_diff_py(date, now)
     if diff == -1:
 	    return 'yesterday'
     if diff == 0:
@@ -39,7 +56,10 @@ def _pretty_date_engine(now, date):
 	    return date.strftime('%B %e')
     return date.strftime('%B %e, %Y')
 
-
 def prettyDate(date):
-    now = date.today()
-    return _pretty_date_engine(now, date)
+    if isinstance(date, zopedt):
+        now = DateTime()
+        return _pretty_date_engine_zope(now, date)
+    elif isinstance(date, pydt):
+        now = date.today()
+        return _pretty_date_engine_py(now, date)
