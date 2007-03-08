@@ -18,8 +18,7 @@ setup(name='topp.utils',
       namespace_packages=['topp'],
       include_package_data=True,
       zip_safe=False,
-      install_requires=["python-dateutil"
-      ],
+      install_requires=["python-dateutil"],
       entry_points="""
       # -*- Entry points: -*-
       
