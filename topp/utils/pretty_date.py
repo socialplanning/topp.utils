@@ -58,7 +58,7 @@ def _pretty_date_engine_py(now, date):
 
 def prettyDate(date):
     if isinstance(date, zopedt):
-        now = DateTime()
+        now = zopedt()
         return _pretty_date_engine_zope(now, date)
     elif isinstance(date, pydt):
         now = date.today()
