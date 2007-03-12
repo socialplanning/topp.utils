@@ -1,1 +1,3 @@
-# this space intentionally left blank
+"""
+generic utilities needed for TOPP projects
+"""
