@@ -20,12 +20,8 @@ def uri_re_string(scheme=('http','https')):
 
 url_re = re.compile(uri_re_string(), re.I)
 
-def is_url(string):
-    """ indicates if the given string is legitimate url syntax """
-
-    if re.match(url_re, string):
-        return True
-    return False
++# indicates if the given string is legitimate url syntax
++is_url = url_re.match
 
 def uri_type(string):
     
