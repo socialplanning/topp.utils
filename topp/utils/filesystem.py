@@ -1,5 +1,14 @@
 import subprocess
 
+def get_args(command):
+    """ return a list of args from a shell command using subprocess """
+
+    arglist = subprocess.Popen('for i in %s; do echo $i; done' % command, 
+                               shell=True,          
+                               stdout=subprocess.PIPE).communicate()[0]
+    arglist = [i for i in arglist.split('\n') if i]
+    return arglist
+
 def which(executable):
     """
     front-end to unix 'which'
