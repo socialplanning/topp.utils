@@ -12,6 +12,14 @@ def activate(workingenv_location):
     activate a workingenv
     """
 
+    # keep pre-workingenv variables
+    globals()['_we_old_os_environ'] = os.environ
+    globals()['_we_old_os_path'] = sys.path
+
+    # deactivate previous workingenv, if it exists
+    if globals().get('deactivate', None):
+        globals()['deactivate']()
+
     # update the python variables
     activate = os.path.join(workingenv_location, 'bin', 'activate')
     command = '. %s && env' % activate
@@ -34,4 +42,9 @@ def activate(workingenv_location):
     except Exception, e:
         raise e.__class__("Error %s while evaluating %r" % (e, pypath))
 
-    
+    def deactivate():
+        os.environ = globals().pop('_we_old_os_environ')
+        sys.path = globals().pop('_we_old_sys_path')        
+        globals().pop('deactivate')
+
+    globals()['deactivate'] = deactivate
