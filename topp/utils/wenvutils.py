@@ -23,6 +23,8 @@ def activate(workingenv_location):
             "Command %r failed with error code %s"
             % (command, process.returncode))
 
+    os.environ.update(dict([ i.split('=',1) for i in env.split('\n') if i ]))
+
     # update sys.path
     process = subprocess.Popen('. %s && python -c "import sys; print sys.path"' % activate, 
                                stdout=subprocess.PIPE, shell=True)
