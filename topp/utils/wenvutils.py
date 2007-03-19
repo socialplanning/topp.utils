@@ -3,6 +3,7 @@ utilities to deal with workingenvs:
 http://svn.colorstudy.com/home/ianb/workingenv/workingenv.py
 """
 
+import sys
 import os
 import subprocess
 
