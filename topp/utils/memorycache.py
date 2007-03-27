@@ -18,6 +18,11 @@ Usage::
     2
     >>> callit(1)
     2
+
+This cache is slightly sloppy, and may call the decorated function
+more than necessary when concurrently accessed from different threads.
+It prefers less locking and less possible deadlocks to avoiding
+function calls.
 """
 
 import threading
@@ -42,7 +47,14 @@ class Cache(object):
         KeyError
         """
         self._check_expire()
-        return self.objects[key][1]
+        created, obj = self.objects[key]
+        if time.time() - created > self.expire:
+            try:
+                del self.objects[key]
+            except KeyError:
+                pass
+            raise KeyError(key)
+        return obj
 
     def set_object(self, key, value):
         """
