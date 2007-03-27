@@ -18,6 +18,10 @@ Usage::
     2
     >>> callit(1)
     2
+    >>> callit.cache.expire_all()
+    >>> callit(1)
+    Calculating 1
+    2
 
 This cache is slightly sloppy, and may call the decorated function
 more than necessary when concurrently accessed from different threads.
