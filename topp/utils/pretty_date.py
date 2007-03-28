@@ -20,7 +20,11 @@
 # USA
 
 from datetime import datetime as pydt
-from DateTime import DateTime as zopedt
+
+try:
+    from DateTime import DateTime as zopedt
+except ImportError:
+    class zopedt: pass
 
 def _date_diff_zope(date1, date2):
     return date1.JulianDay() - date2.JulianDay()
