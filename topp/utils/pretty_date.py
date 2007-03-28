@@ -19,7 +19,7 @@
 # Boston, MA  02110-1301
 # USA
 
-from datetime import datetime as pydt
+from datetime import datetime, date
 
 try:
     from DateTime import DateTime as zopedt
@@ -29,48 +29,56 @@ except ImportError:
 def _date_diff(date1, date2):
     if isinstance(date, zopedt):
         return date1.JulianDay() - date2.JulianDay()
-    elif isinstance(date, pydt):
-        return date1.toordinal() - date2.toordinal()
     else:
-        raise Exception("unsupported datetime object")
+        return date1.toordinal() - date2.toordinal()
+
+def _date_compare(date1, date2):
+    if isinstance(date, zopedt):
+        return date1.year() == date2.year()
+    else:
+        return date1.year == date2.year
 
 def _pretty_date_engine(now, date):
     diff = _date_diff(date, now)
     if diff == -1:
-	    return 'yesterday'
+	    return 'Yesterday'
     if diff == 0:
-	    return 'today'
+	    return 'Today'
     if diff == 1:
-	    return 'tomorrow'
+	    return 'Tomorrow'
     if 0 < diff < 7:
 	    return date.strftime('%A')
-    if diff < 90 and date.year() == now.year():
-	    return date.strftime('%B %e')
-    return date.strftime('%B %e, %Y')
+    if diff < 90 and _date_compare(date, now):
+	    return date.strftime('%B%e')
+    return date.strftime('%B%e, %Y')
         
 def prettyDate(date):
     if isinstance(date, zopedt):
         now = zopedt()
-    elif isinstance(date, pydt):
-        now = date.today()
     else:
-        raise Exception("unsupported datetime object")
+        now = date.today()
     return _pretty_date_engine(now, date)
 
-#if __name__ == '__main__':
-#    def test_pretty_date(self):
-#        now = date(2006, 1, 1)
-#        dates = {
-#            'Today' : date(2006, 1, 1),
-#            'Tomorrow' : date(2006, 1, 2),
-#            'Yesterday' : date(2005, 12, 31),
-#            'Tuesday' : date(2006, 1, 3),
-#            'Saturday' : date(2006, 1, 7),
-#            'January  8' : date(2006, 1, 8),
-#            'December  8, 2006' : date(2006, 12, 8),
-#            'January  8, 2007' : date(2007, 1, 8)
-#            }
-#        
-#    for d in dates:
-#        pd = _pretty_date_engine(now, dates[d])
-#        assert pd == d
+if __name__ == '__main__':
+    def test_pretty_date():
+        now = date(2006, 1, 1)
+        dates = {
+            'Today' : date(2006, 1, 1),
+            'Tomorrow' : date(2006, 1, 2),
+            'Yesterday' : date(2005, 12, 31),
+            'Tuesday' : date(2006, 1, 3),
+            'Saturday' : date(2006, 1, 7),
+            'January 8' : date(2006, 1, 8),
+            'December 8, 2006' : date(2006, 12, 8),
+            'January 8, 2007' : date(2007, 1, 8)
+            }
+        
+        for d in dates:
+            pd = _pretty_date_engine(now, dates[d])
+            try:
+                assert pd == d
+            except AssertionError:
+                print "** Test failed: expected %s, got %s" % (d, pd)
+                
+    test_pretty_date()
+    print "Tests completed."
