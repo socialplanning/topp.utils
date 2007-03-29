@@ -1,6 +1,6 @@
 # WARNING: this file must be kept in sync with tasktracker/public/javascripts/pretty-date.js
 
-# Copyright (C) 2006 The Open Planning Project
+# Copyright (C) 2006-2007 The Open Planning Project
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,21 +19,19 @@
 # Boston, MA  02110-1301
 # USA
 
-from datetime import datetime, date
-
 try:
     from DateTime import DateTime as zopedt
 except ImportError:
     class zopedt: pass
 
 def _date_diff(date1, date2):
-    if isinstance(date, zopedt):
+    if isinstance(date1, zopedt):
         return date1.JulianDay() - date2.JulianDay()
     else:
         return date1.toordinal() - date2.toordinal()
 
 def _date_compare(date1, date2):
-    if isinstance(date, zopedt):
+    if isinstance(date1, zopedt):
         return date1.year() == date2.year()
     else:
         return date1.year == date2.year
@@ -61,6 +59,7 @@ def prettyDate(date):
 
 if __name__ == '__main__':
     def test_pretty_date():
+        from datetime import date
         now = date(2006, 1, 1)
         dates = {
             'Today' : date(2006, 1, 1),
