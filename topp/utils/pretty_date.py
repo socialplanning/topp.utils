@@ -64,17 +64,19 @@ def prettyDate(date):
 
 
 if __name__ == '__main__':
-    def test_pretty_date():
-        now = pydate(2006, 1, 1)
+    def test(date=pydate):
+        """relies on being able to construct the passed-in type of date
+        with YYYY, mm, dd"""
+        now = date(2006, 1, 1)
         dates = {
-            'Today' : pydate(2006, 1, 1),
-            'Tomorrow' : pydate(2006, 1, 2),
-            'Yesterday' : pydate(2005, 12, 31),
-            'Tuesday' : pydate(2006, 1, 3),
-            'Saturday' : pydate(2006, 1, 7),
-            'January 8' : pydate(2006, 1, 8),
-            'December 8, 2006' : pydate(2006, 12, 8),
-            'January 8, 2007' : pydate(2007, 1, 8)
+            'Today' : date(2006, 1, 1),
+            'Tomorrow' : date(2006, 1, 2),
+            'Yesterday' : date(2005, 12, 31),
+            'Tuesday' : date(2006, 1, 3),
+            'Saturday' : date(2006, 1, 7),
+            'January 8' : date(2006, 1, 8),
+            'December 8, 2006' : date(2006, 12, 8),
+            'January 8, 2007' : date(2007, 1, 8)
             }
         
         for d in dates:
@@ -85,5 +87,7 @@ if __name__ == '__main__':
             except AssertionError:
                 print "** Test failed: expected %s, got %s" % (d, pd)
                 
-    test_pretty_date()
+    test(date=pydate)
+    test(date=pydatetime)
+    #test(date=zopedatetime) # comment out if you can import Zope DateTime
     print "Tests completed."
