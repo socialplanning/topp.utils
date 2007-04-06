@@ -19,63 +19,69 @@
 # Boston, MA  02110-1301
 # USA
 
+from datetime import date as pydate
+from datetime import datetime as pydatetime
 try:
-    from DateTime import DateTime as zopedt
+    from DateTime import DateTime as zopedatetime
 except ImportError:
-    class zopedt: pass
+    class zopedatetime: pass
 
-def _date_diff(date1, date2):
-    if isinstance(date1, zopedt):
-        return date1.JulianDay() - date2.JulianDay()
-    else:
-        return date1.toordinal() - date2.toordinal()
 
-def _date_compare(date1, date2):
-    if isinstance(date1, zopedt):
-        return date1.year() == date2.year()
-    else:
-        return date1.year == date2.year
+class DateWrapper(object):
+    def __init__(self, date):
+        self.date = date
+        if isinstance(date, zopedatetime):
+            self.now = zopedatetime()
+            self.datediff = lambda d1, d2: d1.JulianDay() - d2.JulianDay()
+            self.yeardiff = lambda d1, d2: d1.year() - d2.year()
+        elif isinstance(date, pydate) or isinstance(date, pydatetime):
+            self.now = pydate.today()
+            self.datediff = lambda d1, d2: d1.toordinal() - d2.toordinal()
+            self.yeardiff = lambda d1, d2: d1.year - d2.year
+        else:
+            raise Exception() # TODO
 
-def _pretty_date_engine(now, date):
-    diff = _date_diff(date, now)
-    if diff == -1:
-	    return 'Yesterday'
-    if diff == 0:
-	    return 'Today'
-    if diff == 1:
-	    return 'Tomorrow'
-    if 0 < diff < 7:
-	    return date.strftime('%A')
-    if diff < 90 and _date_compare(date, now):
-	    return date.strftime('%B%e')
-    return date.strftime('%B%e, %Y')
+    def prettystr(self):
+        diff = self.datediff(self.date, self.now)
+        if diff == -1:
+            return 'Yesterday'
+        if diff == 0:
+            return 'Today'
+        if diff == 1:
+            return 'Tomorrow'
+        if 0 < diff < 7:
+            return self.date.strftime('%A')
+        if diff < 90 and self.yeardiff(self.date, self.now) == 0:
+            return self.date.strftime('%B%e')
+        return self.date.strftime('%B%e, %Y')
+
+
         
 def prettyDate(date):
-    if isinstance(date, zopedt):
-        now = zopedt()
-    else:
-        now = date.today()
-    return _pretty_date_engine(now, date)
+    date = DateWrapper(date)
+    return date.prettystr()
+
+
 
 if __name__ == '__main__':
     def test_pretty_date():
-        from datetime import date
-        now = date(2006, 1, 1)
+        now = pydate(2006, 1, 1)
         dates = {
-            'Today' : date(2006, 1, 1),
-            'Tomorrow' : date(2006, 1, 2),
-            'Yesterday' : date(2005, 12, 31),
-            'Tuesday' : date(2006, 1, 3),
-            'Saturday' : date(2006, 1, 7),
-            'January 8' : date(2006, 1, 8),
-            'December 8, 2006' : date(2006, 12, 8),
-            'January 8, 2007' : date(2007, 1, 8)
+            'Today' : pydate(2006, 1, 1),
+            'Tomorrow' : pydate(2006, 1, 2),
+            'Yesterday' : pydate(2005, 12, 31),
+            'Tuesday' : pydate(2006, 1, 3),
+            'Saturday' : pydate(2006, 1, 7),
+            'January 8' : pydate(2006, 1, 8),
+            'December 8, 2006' : pydate(2006, 12, 8),
+            'January 8, 2007' : pydate(2007, 1, 8)
             }
         
         for d in dates:
-            pd = _pretty_date_engine(now, dates[d])
+            wrapped = DateWrapper(dates[d])
+            wrapped.now = now
             try:
-                assert pd == d
+                assert d == wrapped.prettystr()
             except AssertionError:
                 print "** Test failed: expected %s, got %s" % (d, pd)
                 
