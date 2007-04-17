@@ -53,8 +53,8 @@ class DateWrapper(object):
         if 0 < diff < 7:
             return self.date.strftime('%A')
         if diff < 90 and self.yeardiff(self.date, self.now) == 0:
-            return self.date.strftime('%B%e')
-        return self.date.strftime('%B%e, %Y')
+            return self.date.strftime('%B %-e')
+        return self.date.strftime('%B %-e, %Y')
 
 
         
