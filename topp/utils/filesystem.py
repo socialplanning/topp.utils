@@ -1,4 +1,8 @@
+import os
 import subprocess
+
+def abspath(path):
+    return os.path.abspath(os.path.expanduser(path))
 
 def get_args(command):
     """ return a list of args from a shell command using subprocess """
