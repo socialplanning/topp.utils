@@ -24,7 +24,8 @@ from datetime import datetime as pydatetime
 try:
     from DateTime import DateTime as zopedatetime
 except ImportError:
-    class zopedatetime: pass
+    class zopedatetime:
+        _import_error = True
 
 
 class DateWrapper(object):
@@ -89,5 +90,7 @@ if __name__ == '__main__':
                 
     test(date=pydate)
     test(date=pydatetime)
-    #test(date=zopedatetime) # comment out if you can import Zope DateTime
+    if not zopedatetime._import_error:
+        test(date=zopedatetime)
+
     print "Tests completed."
