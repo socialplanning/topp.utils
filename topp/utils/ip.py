@@ -5,5 +5,8 @@ def get_ip():
 
     import socket
     hostname = socket.gethostname()
-    ip = socket.gethostbyname(hostname)
+    try:
+        ip = socket.gethostbyname(hostname)
+    except socket.gaierror:
+        ip = '127.0.0.1'
     return ip
