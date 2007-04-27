@@ -1,8 +1,20 @@
+
 import os
 import subprocess
 
 def abspath(path):
     return os.path.abspath(os.path.expanduser(path))
+
+def makedir(dirname):
+    """ 
+    make directory if it does not already exist
+    """
+
+    if os.path.lexists(dirname):
+        if os.path.isdir(dirname):
+            return
+        raise OSError('%s exists but is not a directory' % dirname)
+    os.makedirs(dirname)
 
 def get_args(command):
     """ return a list of args from a shell command using subprocess """
