@@ -1,6 +1,8 @@
+import sys
+
 def error(msg, parser=None, warning=False):
     """
-    print an error message
+    print an error message.
     in the future, this should log
     """
 
