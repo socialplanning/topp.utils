@@ -40,7 +40,7 @@ class DateWrapper(object):
             self.datediff = lambda d1, d2: d1.toordinal() - d2.toordinal()
             self.yeardiff = lambda d1, d2: d1.year - d2.year
         else:
-            raise Exception() # TODO
+            raise ValueError('pretty_date: Unknown date object: %s' % date.__class__) # TODO
 
     def prettystr(self):
         diff = self.datediff(self.date, self.now)
@@ -92,5 +92,11 @@ if __name__ == '__main__':
     test(date=pydatetime)
     if not zopedatetime._import_error:
         test(date=zopedatetime)
+
+    try:
+        prettyDate('not a date')
+        assert 0
+    except ValueError, e:
+        assert "Unknown date object: <type 'str'>" in e.args[0]
 
     print "Tests completed."
