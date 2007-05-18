@@ -83,11 +83,13 @@ if __name__ == '__main__':
         for d in dates:
             wrapped = DateWrapper(dates[d])
             wrapped.now = now
+            expected = wrapped.prettystr()
             try:
-                assert d == wrapped.prettystr()
+                assert d == expected
             except AssertionError:
-                print "** Test failed: expected %s, got %s" % (d, pd)
+                print "** Test failed: expected %s, got %s" % (d, expected)
                 
+
     test(date=pydate)
     test(date=pydatetime)
     if not zopedatetime._import_error:
