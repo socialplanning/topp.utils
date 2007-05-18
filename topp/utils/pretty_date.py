@@ -40,7 +40,7 @@ class DateWrapper(object):
             self.datediff = lambda d1, d2: d1.toordinal() - d2.toordinal()
             self.yeardiff = lambda d1, d2: d1.year - d2.year
         else:
-            raise ValueError('pretty_date: Unknown date object: %s' % date.__class__) # TODO
+            raise ValueError('pretty_date: Unknown date object: %s' % date.__class__)
 
     def prettystr(self):
         diff = self.datediff(self.date, self.now)
@@ -52,9 +52,18 @@ class DateWrapper(object):
             return 'Tomorrow'
         if 0 < diff < 7:
             return self.date.strftime('%A')
+
+        month = self.date.strftime('%B')
+        day = self.date.strftime('%d')
+        if day.startswith('0'):
+            day = day[1:]
+        month_day = ' '.join((month, day))
+
         if diff < 90 and self.yeardiff(self.date, self.now) == 0:
-            return self.date.strftime('%B %-e')
-        return self.date.strftime('%B %-e, %Y')
+            return month_day
+
+        year = self.date.strftime(', %Y')
+        return month_day + year
 
 
         
@@ -69,7 +78,7 @@ if __name__ == '__main__':
         """relies on being able to construct the passed-in type of date
         with YYYY, mm, dd"""
         now = date(2006, 1, 1)
-        dates = {
+        expectedmap = {
             'Today' : date(2006, 1, 1),
             'Tomorrow' : date(2006, 1, 2),
             'Yesterday' : date(2005, 12, 31),
@@ -80,19 +89,19 @@ if __name__ == '__main__':
             'January 8, 2007' : date(2007, 1, 8)
             }
         
-        for d in dates:
-            wrapped = DateWrapper(dates[d])
+        for expected in expectedmap:
+            wrapped = DateWrapper(expectedmap[expected])
             wrapped.now = now
-            expected = wrapped.prettystr()
+            got = wrapped.prettystr()
             try:
-                assert d == expected
+                assert got == expected
             except AssertionError:
-                print "** Test failed: expected %s, got %s" % (d, expected)
+                print "** Test failed: expected %s, got %s" % (expected, got)
                 
 
     test(date=pydate)
     test(date=pydatetime)
-    if not zopedatetime._import_error:
+    if not hasattr(zopedatetime, '_import_error'):
         test(date=zopedatetime)
 
     try:
