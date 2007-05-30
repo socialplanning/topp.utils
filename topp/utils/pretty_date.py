@@ -106,7 +106,7 @@ if __name__ == '__main__':
 
     try:
         prettyDate('not a date')
-        assert 0
+        assert 'we expected to throw an exception' == 0
     except ValueError, e:
         assert "Unknown date object: <type 'str'>" in e.args[0]
 
