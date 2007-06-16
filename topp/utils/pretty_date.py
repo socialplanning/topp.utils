@@ -45,9 +45,9 @@ class DateWrapper(object):
     def prettystr(self):
         diff = self.datediff(self.date, self.now)
         if diff == -1:
-            return 'Yesterday'
+            return 'yesterday'
         if diff == 0:
-            return 'Today'
+            return 'today'
         if diff == 1:
             return 'Tomorrow'
         if 0 < diff < 7:
@@ -79,9 +79,9 @@ if __name__ == '__main__':
         with YYYY, mm, dd"""
         now = date(2006, 1, 1)
         expectedmap = {
-            'Today' : date(2006, 1, 1),
-            'Tomorrow' : date(2006, 1, 2),
-            'Yesterday' : date(2005, 12, 31),
+            'today' : date(2006, 1, 1),
+            'tomorrow' : date(2006, 1, 2),
+            'yesterday' : date(2005, 12, 31),
             'Tuesday' : date(2006, 1, 3),
             'Saturday' : date(2006, 1, 7),
             'January 8' : date(2006, 1, 8),
