@@ -49,7 +49,7 @@ class DateWrapper(object):
         if diff == 0:
             return 'today'
         if diff == 1:
-            return 'Tomorrow'
+            return 'tomorrow'
         if 0 < diff < 7:
             return self.date.strftime('%A')
 
