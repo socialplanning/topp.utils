@@ -19,6 +19,7 @@
 # Boston, MA  02110-1301
 # USA
 
+from time import strptime
 from datetime import date as pydate
 from datetime import datetime as pydatetime
 try:
@@ -30,19 +31,31 @@ except ImportError:
 
 class DateWrapper(object):
     def __init__(self, date):
-        self.date = date
-        if isinstance(date, zopedatetime):
-            self.now = zopedatetime()
-            self.datediff = lambda d1, d2: d1.JulianDay() - d2.JulianDay()
-            self.yeardiff = lambda d1, d2: d1.year() - d2.year()
-        elif isinstance(date, pydate) or isinstance(date, pydatetime):
+        if isinstance(date, str):
+            # convert it to a pydatetime
+            # expects date == 'YYYY-MM-DD...' or 'YYYY/MM/DD...'
+            year = date[:4]
+            month = date[5:7]
+            day = date[8:10]
+            date = year + month + day
+            date = strptime(date, '%Y%m%d')[:3] # time tuple with only date info
+            date = pydatetime(*date) # convert to a pydatetime
+        if isinstance(date, pydatetime) or isinstance(date, pydate): # intentionally not elif
             self.now = pydate.today()
             self.datediff = lambda d1, d2: d1.toordinal() - d2.toordinal()
             self.yeardiff = lambda d1, d2: d1.year - d2.year
+        elif isinstance(date, zopedatetime):
+            self.now = zopedatetime()
+            self.datediff = lambda d1, d2: d1.JulianDay() - d2.JulianDay()
+            self.yeardiff = lambda d1, d2: d1.year() - d2.year()
         else:
             raise ValueError('pretty_date: Unknown date object: %s' % date.__class__)
 
+        self.date = date
+
     def prettystr(self):
+        """relies on self.date being a pydatetime or a zopedatetime
+        (either way it will have a strftime method)"""
         diff = self.datediff(self.date, self.now)
         if diff == -1:
             return 'yesterday'
@@ -74,23 +87,32 @@ def prettyDate(date):
 
 
 if __name__ == '__main__':
-    def test(date=pydate):
+
+    def expectedmap(date_constructor=pydate):
+        return {
+            'today' : date_constructor(2006, 1, 1),
+            'tomorrow' : date_constructor(2006, 1, 2),
+            'yesterday' : date_constructor(2005, 12, 31),
+            'Tuesday' : date_constructor(2006, 1, 3),
+            'Saturday' : date_constructor(2006, 1, 7),
+            'January 8' : date_constructor(2006, 1, 8),
+            'December 8, 2006' : date_constructor(2006, 12, 8),
+            'January 8, 2007' : date_constructor(2007, 1, 8)
+            }
+
+    def date_str_constructor(*args):
+        return '%4d-%02d-%02d' % args # expects 3 integers YYYY, MM, DD
+
+    def test(date_constructor=pydate):
         """relies on being able to construct the passed-in type of date
         with YYYY, mm, dd"""
-        now = date(2006, 1, 1)
-        expectedmap = {
-            'today' : date(2006, 1, 1),
-            'tomorrow' : date(2006, 1, 2),
-            'yesterday' : date(2005, 12, 31),
-            'Tuesday' : date(2006, 1, 3),
-            'Saturday' : date(2006, 1, 7),
-            'January 8' : date(2006, 1, 8),
-            'December 8, 2006' : date(2006, 12, 8),
-            'January 8, 2007' : date(2007, 1, 8)
-            }
+        if date_constructor == zopedatetime:
+            now = zopedatetime(2006, 1, 1)
+        else:
+            now = pydatetime(2006, 1, 1)
         
-        for expected in expectedmap:
-            wrapped = DateWrapper(expectedmap[expected])
+        for expected, input in expectedmap(date_constructor).items():
+            wrapped = DateWrapper(input)
             wrapped.now = now
             got = wrapped.prettystr()
             try:
@@ -98,16 +120,16 @@ if __name__ == '__main__':
             except AssertionError:
                 print "** Test failed: expected %s, got %s" % (expected, got)
                 
-
-    test(date=pydate)
-    test(date=pydatetime)
+    test(date_constructor=date_str_constructor)
+    test(date_constructor=pydate)
+    test(date_constructor=pydatetime)
     if not hasattr(zopedatetime, '_import_error'):
         test(date=zopedatetime)
 
     try:
-        prettyDate('not a date')
+        prettyDate(['not a date'])
         assert 'we expected to throw an exception' == 0
     except ValueError, e:
-        assert "Unknown date object: <type 'str'>" in e.args[0]
+        assert "Unknown date object: <type 'list'>" in e.args[0]
 
     print "Tests completed."
