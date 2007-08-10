@@ -6,7 +6,9 @@ remove tags from html
 
 import re
 regexes = ('<![ \r\n\t]*(--([^\-]|[\r\n]|-[^\-])*--[ \r\n\t]*)>', 
-           '<[^>]*>', '&[A-Za-z#0-9]+;', '<')
+           '<(?:([^>"]*?)|(?:"[^"]*"))*>',
+           '&[A-Za-z#0-9]+;', 
+           '<')
 regexes = [ re.compile(i,re.S) for i in regexes ]
 
 def detag(string):
