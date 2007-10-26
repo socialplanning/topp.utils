@@ -28,7 +28,6 @@ def layer_factory(layer_name, setup=None, teardown=None, bases=()):
     <type 'classobj'>
     >>> layer3.__bases__
     ()
-    
     """
     attrs = dict()
     if setup:
@@ -36,3 +35,32 @@ def layer_factory(layer_name, setup=None, teardown=None, bases=()):
     if teardown:
         attrs['tearDown']=dumb_method(setup)
     return types.ClassType(layer_name, bases, attrs)
+
+
+class InterceptorLayerBuilder(object):
+    """implementation sketch so I don't forget"""
+    def __init__(self, conf):
+        self.conf = conf
+
+    @classmethod
+    def parse(cls, filepath):
+        raise NotImplementedError
+        return cls(conf)
+
+    @classmethod
+    def layer(cls, layer_name, filepath, bases):
+        inst = cls.parse(filepath)
+        return layer_factory(layer_name,
+                             setup=inst.setup_factory(),
+                             teardown=inst.setup_factory(),
+                             bases=bases)
+    
+    def setup_factory(self):
+        def setup(cls):
+            raise NotImplementedError
+        return setup
+
+    def teardown_factory(self):
+        def setup(cls):
+            raise NotImplementedError
+        return setup
