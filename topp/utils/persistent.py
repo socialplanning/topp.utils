@@ -16,3 +16,15 @@ class OOBTreeBag(DictMixin, Persistent):
         return [x for x in self._data.keys()]
     def lazy_keys(self):
         return self._data.keys()
+
+
+class KeyedMap(OOBTreeBag):
+    """simple btree ish mapping with it's own unique key"""
+    def __init__(self, btree=None, key=None):
+        self._data = btree
+        if not btree: # for migration
+            self._data = OOBTree()
+        self.key = self.make_key(key)
+        
+    def make_key(self, input):
+        return hash(self, input)
