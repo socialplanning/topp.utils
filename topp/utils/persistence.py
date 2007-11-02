@@ -30,6 +30,7 @@ class KeyedMap(OOBTreeBag):
     def make_key(self, input):
         return hash(self, input)
 
+
 def bbb_keymap(wrap=True):
     """auto-migrater"""
     def wrap_func(func): 
