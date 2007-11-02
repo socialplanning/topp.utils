@@ -1,6 +1,7 @@
 from UserDict import DictMixin
 from persistent import Persistent
-from BTree.OOBTree import OOBTree
+from BTrees.OOBTree import OOBTree
+from orderedpersistentmapping import OrderedPersistentMapping
 
 
 class OOBTreeBag(DictMixin, Persistent):
