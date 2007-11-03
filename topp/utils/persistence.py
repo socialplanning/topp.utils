@@ -2,7 +2,9 @@ from UserDict import DictMixin
 from persistent import Persistent
 from BTrees.OOBTree import OOBTree
 from orderedpersistentmapping import OrderedPersistentMapping
+import logging
 
+log = logging.getLogger('topp.utils.persistence')
 
 class OOBTreeBag(DictMixin, Persistent):
     def __init__(self):
@@ -25,10 +27,12 @@ class KeyedMap(OOBTreeBag):
         self._data = btree
         if not btree: # for migration
             self._data = OOBTree()
-        self.key = self.make_key(key)
+        new_key = self.make_key(key)
+        log.info(new_key) 
+        self.key = new_key
         
     def make_key(self, input):
-        return hash((self, input))
+        return abs(hash((self, input)))
 
 
 def bbb_keymap(wrap=True, secret=None):
@@ -36,7 +40,7 @@ def bbb_keymap(wrap=True, secret=None):
     def wrap_func(func): 
         def wrap(*args, **kwargs):
             keymap = func(*args, **kwargs)
-            if isinstance(keymap, KeyedMap):
+            if not isinstance(keymap, KeyedMap):
                 return KeyedMap(btree=keymap, key=(args, secret))
             return keymap
         return wrap
