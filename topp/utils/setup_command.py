@@ -12,6 +12,7 @@ class zinstall(Command):
     
     def initialize_options(self):
         self.args = None
+        self.distname = self.distribution.get_name()
 
     def finalize_options(self):
         pass
@@ -24,11 +25,12 @@ class zinstall(Command):
         if len(self.args)==1:
             path = self.args.pop()
         instance_path = get_path(path)
-        req = Requirement.parse(self._req_name)
+        req = Requirement.parse(self.distname)
 
         for filename in 'meta', 'overrides', 'configure',:
-            fn = resource_filename(req, '%s-%s.zcml' %(self._req_name, fn))
-            shutil.copy(overrides, instance_path)
+            fn = resource_filename(req, '%s-%s.zcml' %(self.distname, filename))
+            if os.path.exists(fn):
+                shutil.copy(fn, instance_path)
 
 
 def get_path(start):
@@ -43,7 +45,6 @@ def get_path(start):
     for env in 'VIRTUAL_ENV', 'WORKING_ENV',:
         if os.environ.has_key(env):
             path = os.path.join(os.environ[env], 'zope', end)
-            print path
             if os.path.exists(path):
                 return path
     print "No path to zope found. Please enter a path to a zope instance"
