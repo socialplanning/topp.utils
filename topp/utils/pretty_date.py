@@ -19,7 +19,7 @@
 # Boston, MA  02110-1301
 # USA
 
-from time import strptime
+from dateutil.parser import parse
 from datetime import date as pydate
 from datetime import datetime as pydatetime
 try:
@@ -31,15 +31,9 @@ except ImportError:
 
 class DateWrapper(object):
     def __init__(self, date):
-        if isinstance(date, str):
+        if isinstance(date, basestring):
             # convert it to a pydatetime
-            # expects date == 'YYYY-MM-DD...' or 'YYYY/MM/DD...'
-            year = date[:4]
-            month = date[5:7]
-            day = date[8:10]
-            date = year + month + day
-            date = strptime(date, '%Y%m%d')[:3] # time tuple with only date info
-            date = pydatetime(*date) # convert to a pydatetime
+            date = parse(date)
         if isinstance(date, pydatetime) or isinstance(date, pydate): # intentionally not elif
             self.now = pydate.today()
             self.datediff = lambda d1, d2: d1.toordinal() - d2.toordinal()
