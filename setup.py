@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.2.8'
+version = '0.2.9'
 
 setup(name='topp.utils',
       version=version,
-      description="",
+      description="utility library used for openplans.org",
       long_description="""\
 """,
       classifiers=[], # Get strings from http://www.python.org/pypi?%3Aaction=list_classifiers
@@ -21,6 +21,7 @@ setup(name='topp.utils',
       install_requires=["python-dateutil"],
       entry_points="""
       # -*- Entry points: -*-
-      
+      [distutils.commands]
+      zinstall = topp.utils.setup_command:zinstall      
       """,
       )
