@@ -36,7 +36,7 @@ class zinstall(Command):
 def get_path(start):
     end = 'etc/package-includes'
     if start:
-        path = os.join(start, end)
+        path = os.path.join(start, end)
         if os.path.exists(path):
             return path
         else:
