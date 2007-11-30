@@ -28,7 +28,7 @@ class zinstall(Command):
         req = Requirement.parse(self.distname)
 
         for filename in 'meta', 'overrides', 'configure',:
-            fn = resource_filename(req, '%s-%s.zcml' %(self.distname, filename))
+            fn = resource_filename(req, '%s-%s.zcml' %(self.distname.lower(), filename))
             if os.path.exists(fn):
                 shutil.copy(fn, instance_path)
 
