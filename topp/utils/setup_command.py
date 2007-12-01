@@ -35,9 +35,13 @@ class zinstall(Command):
 
 def get_path(start):
     end = 'etc/package-includes'
+    sanitycheck_end = 'etc/site.zcml'
     if start:
+        sanity_check = os.path.join(start, sanitycheck_end)
         path = os.path.join(start, end)
-        if os.path.exists(path):
+        if os.path.isfile(sanity_check):
+            if not os.path.exists(path):
+                os.mkdir(path)
             return path
         else:
             print "Path %s not found" %path
@@ -45,6 +49,9 @@ def get_path(start):
     for env in 'VIRTUAL_ENV', 'WORKING_ENV',:
         if os.environ.has_key(env):
             path = os.path.join(os.environ[env], 'zope', end)
-            if os.path.exists(path):
+            sanity_check = os.path.join(os.environ[env], 'zope', sanitycheck_end)
+            if os.path.isfile(sanity_check):
+                if not os.path.exists(path):
+                    os.mkdir(path)
                 return path
     print "No path to zope found. Please enter a path to a zope instance"
