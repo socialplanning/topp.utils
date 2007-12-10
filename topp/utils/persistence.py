@@ -35,16 +35,4 @@ class KeyedMap(OOBTreeBag):
         return abs(hash((self, input)))
 
 
-def bbb_keymap(wrap=True, secret=None):
-    """auto-migrater"""
-    def wrap_func(func): 
-        def wrap(*args, **kwargs):
-            keymap = func(*args, **kwargs)
-            if not isinstance(keymap, KeyedMap):
-                return KeyedMap(btree=keymap, key=(args, secret))
-            return keymap
-        return wrap
-    if wrap:
-        return wrap_func
-    else:
-        return func
+
