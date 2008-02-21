@@ -39,3 +39,12 @@ def uri_type(string):
     for i in uri_types:
         if re.match(uri_types[i], string):
             return i
+
+def uri_same_source(left, right):
+    """Compare the protocol and host of the two urls, and return True
+    if they are the same"""
+    from urlparse import urlsplit
+    left_proto, left_host = urlsplit(left)[0:2]
+    right_proto, right_host = urlsplit(right)[0:2]
+    return left_proto == right_proto and left_host == right_host
+
