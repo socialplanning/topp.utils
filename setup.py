@@ -1,8 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.3.1'
-
+version = '0.4'
 
 f = open('README.txt')
 readme = "".join(f.readlines())
@@ -27,5 +26,7 @@ setup(name='topp.utils',
       # -*- Entry points: -*-
       [distutils.commands]
       zinstall = topp.utils.setup_command:zinstall      
+      [console_scripts]
+      troff = topp.utils.modules:uninstall_package
       """,
       )

@@ -4,6 +4,8 @@ functions having to do with python modules
 
 import os
 import pkg_resources
+import shutil
+import sys
 
 def module_directory(module):
     """
@@ -34,3 +36,24 @@ def importable_name(name):
         raise ValueError(
             'The object named by %r could not be imported\n%s' %  (
             name, IO.getvalue()))
+
+def uninstall_package(argv=None):
+    if argv is None:
+        argv = sys.argv
+
+    try:
+        package_name = argv[1]
+    except IndexError:
+        print "Usage: troff [PACKAGE]"
+        return 1
+
+    try:
+        package = pkg_resources.get_distribution(package_name)
+    except pkg_resources.DistributionNotFound:
+        print "Package %s doesn't seem to be installed." % package_name
+        return 1
+
+    location = package.location
+    shutil.rmtree(location)
+    
+    print "Uninstalled package %s" % package_name
