@@ -27,6 +27,6 @@ setup(name='topp.utils',
       [distutils.commands]
       zinstall = topp.utils.setup_command:zinstall      
       [console_scripts]
-      troff = topp.utils.modules:uninstall_package
+      pytroff = topp.utils.modules:uninstall_package
       """,
       )

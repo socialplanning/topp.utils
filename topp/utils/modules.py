@@ -44,7 +44,7 @@ def uninstall_package(argv=None):
     try:
         package_name = argv[1]
     except IndexError:
-        print "Usage: troff [PACKAGE]"
+        print "Usage: pytroff [PACKAGE]"
         return 1
 
     try:
