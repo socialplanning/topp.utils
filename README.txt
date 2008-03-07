@@ -3,7 +3,7 @@
 ============
 
 A library of generally useful pieces of python for working with zope,
-wsgi, pylons, setuptools, dates and the openplanning project's
+wsgi, pylons, setuptools, dates and the open planning project's
 software offerings.
 
 Pu Pu Platter of Python delights
@@ -19,6 +19,9 @@ Pu Pu Platter of Python delights
    and classmethod descriptors 
 
 * 'topp.utils.memorycache.Cache' -- simple in memory cache
+
+* 'topp.utils.modules.uninstall_package' -- remove a python package
+  from the current environment
 
 * 'topp.utils.persistence' -- some extensions of ZODB persistence classes
 

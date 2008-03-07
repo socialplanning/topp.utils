@@ -1,0 +1,9 @@
+====
+v0.4
+====
+
+ * topp.utils.modules.uninstall_package -- uninstall a python package
+from the current environment
+
+ * `pytroff` console script hook into uninstall_package:
+usage: pytroff (PACKAGE_NAME)
