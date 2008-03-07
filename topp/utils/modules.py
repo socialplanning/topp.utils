@@ -58,6 +58,7 @@ def uninstall_package(argv=None):
     if location.endswith('.egg'):
         shutil.rmtree(location)
     else:
+        # assume it's a development package
         current = os.getcwd()
         os.chdir(location)
         subprocess.Popen(['python', 'setup.py', 'develop', '--uninstall']).wait()
