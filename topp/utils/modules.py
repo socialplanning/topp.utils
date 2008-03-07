@@ -5,6 +5,7 @@ functions having to do with python modules
 import os
 import pkg_resources
 import shutil
+import subprocess
 import sys
 
 def module_directory(module):
@@ -54,6 +55,12 @@ def uninstall_package(argv=None):
         return 1
 
     location = package.location
-    shutil.rmtree(location)
+    if location.endswith('.egg'):
+        shutil.rmtree(location)
+    else:
+        current = os.getcwd()
+        os.chdir(location)
+        subprocess.Popen(['python', 'setup.py', 'develop', '--uninstall']).wait()
+        os.chdir(current)
     
     print "Uninstalled package %s" % package_name

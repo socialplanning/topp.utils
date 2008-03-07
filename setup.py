@@ -7,8 +7,6 @@ f = open('README.txt')
 readme = "".join(f.readlines())
 f.close()
 
-print readme
-
 setup(name='topp.utils',
       version=version,
       description="utility library used for openplans.org",
