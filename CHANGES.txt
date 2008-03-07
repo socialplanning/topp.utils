@@ -1,5 +1,8 @@
-v0.4.1 (unreleased)
+v0.4.1 (07-03-08)
 -------------------
+
+ * topp.utils.modules.uninstall_package no longer deletes codebase if
+package happens to be installed in develop mode
 
 v0.4 (07-03-08)
 ---------------
