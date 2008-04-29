@@ -1,9 +1,11 @@
 """Entry point utils."""
 from zope.dottedname.resolve import resolve
 
-def str2obj(epstr):
+def load_object(epstr):
+    """Loads the object represented in entry-point syntax by the
+    specified string."""
     if ':' in epstr:
-        module, obj = epstr.split(':')
+        module, attr = epstr.split(':')
         module = resolve(module)
-        return getattr(module, obj)
+        return getattr(module, attr)
     return resolve(epstr)
