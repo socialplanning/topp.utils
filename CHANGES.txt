@@ -1,3 +1,8 @@
+v0.4.3 (unreleased)
+-------------------
+ * added topp.utils.eputils, a place to put entry-point-related utilities
+such as str2obj (loads an object from an entry-point-formatted string)
+
 v0.4.2 (unreleased)
 -------------------
 
