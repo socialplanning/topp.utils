@@ -4,7 +4,7 @@ import sys, os
 version = '0.5.1dev'
 
 f = open('README.txt')
-readme = "".join(f.readlines())
+readme = f.read()
 f.close()
 
 setup(name='topp.utils',
