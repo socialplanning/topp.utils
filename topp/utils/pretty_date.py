@@ -47,7 +47,13 @@ class DateWrapper(object):
 
         self.date = date
 
-    def prettystr(self):
+    def prettystr(self, include_time=False):
+        datestr = self._prettystr_date()
+        if include_time:
+            datestr = '%s %s' % (datestr, self.date.strftime('%X'))
+        return datestr
+        
+    def _prettystr_date(self):
         """relies on self.date being a pydatetime or a zopedatetime
         (either way it will have a strftime method)"""
         diff = self.datediff(self.date, self.now)
@@ -74,9 +80,9 @@ class DateWrapper(object):
 
 
         
-def prettyDate(date):
+def prettyDate(date, include_time=False):
     date = DateWrapper(date)
-    return date.prettystr()
+    return date.prettystr(include_time)
 
 
 
