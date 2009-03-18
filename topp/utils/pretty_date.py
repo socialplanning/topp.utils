@@ -50,7 +50,10 @@ class DateWrapper(object):
     def prettystr(self, include_time=False):
         datestr = self._prettystr_date()
         if include_time:
-            datestr = '%s %s' % (datestr, self.date.strftime('%X'))
+            timestr = self.date.strftime('%I:%M%p')
+            if timestr.startswith('0'):
+                timestr = timestr[1:]
+            datestr = '%s %s' % (datestr, timestr)
         return datestr
         
     def _prettystr_date(self):
