@@ -28,7 +28,7 @@ class KeyedMap(OOBTreeBag):
         if not btree: # for migration
             self._data = OOBTree()
         new_key = self.make_key(key)
-        log.info(new_key) 
+        log.debug(new_key) 
         self.key = new_key
         
     def make_key(self, input):
