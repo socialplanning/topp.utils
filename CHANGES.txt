@@ -1,3 +1,20 @@
+v0.5.2
+------
+
+* added a non-persistent SortedDict class (from Django)
+
+* other changes nobody kept track of.
+
+v0.5.1
+------
+nobody kept track.
+
+
+v0.5 
+-----
+
+nobody kept track.
+
 v0.4.3 (unreleased)
 -------------------
  * added topp.utils.eputils, a place to put entry-point-related utilities
